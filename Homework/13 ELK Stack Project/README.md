@@ -2,7 +2,7 @@
 
 The files in this repository were used to configure the network depicted below.
 
-![Network](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Diagram/XRedTeam_Infrastructure.png)
+![XRed_team_Infra.png](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Diagram/XRed_team_Infra.png)
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. 
 
