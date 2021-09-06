@@ -31,7 +31,7 @@ Load balancing ensures that the application will be highly available, in additio
 Another important component in this design is Jump box. It is a special purpose machine typically used to access machines within the internal network or trusted networks. Jump box is exposed to the public internet and sitting in front of other machines within the internal network. Provisioner tool sits in Jumpbox to facilitate the deployment of virtual machines and containers automatically without much human effort. This will minimize human errors and make the deployment easier especially if dealing with thousands of machines.
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the data and system logs. In this project, we installed two types of beats. There
-are Filebeat and Metribeat. Filebeat is a lightweight shipper for forwarding and centralizing log data. it watches for the log files, collects, and forwards them either to Elasticsearch or Logstash for indexing. Metricbeat is an Elastic Beat. It is a lightweight shipper which can be installed in the servers to periodically collects metrics from the operating system and from services running on the server. Metricbeat records the metrics and statistic and ship to a specified output destination such as Elasticsearch or Logstash.
+are Filebeat and Metribeat. Filebeat watches for the system log files, collects, and forwards them either to Elasticsearch or Logstash for indexing. On the other hand, Metricbeat records the metrics and statistic such as CPU or memory data and ship to a specified output destination such as Elasticsearch or Logstash.
 
 The configuration details of each machine may be found below.
 
