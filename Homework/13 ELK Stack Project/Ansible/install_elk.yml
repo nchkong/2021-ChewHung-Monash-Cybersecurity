@@ -1,0 +1,59 @@
+---
+  - name: Configure ELK Server
+    hosts: elk
+    remote_user: azdmin
+    become: true
+    tasks:
+
+#Installing Docker
+    - name: Install docker.io and python3-pip
+      apt:
+        name: docker.io
+        force_apt_get: yes
+        update_cache: yes
+        state: present
+
+#Installing python3.pip
+    - name: Install pip3
+      apt:
+        name: python3-pip
+        force_apt_get: yes
+        update_cache: yes
+        state: present
+
+#Install Docker python module
+    - name: Install Docker python module
+      pip:
+        name: docker
+        state: present
+
+# Use command module
+    - name: Increase virtual memory
+      command: sysctl -w vm.max_map_count=262144
+
+# Use sysctl module
+    - name: Use more memory
+      sysctl:
+        name: vm.max_map_count
+        value: 262144
+        state: present
+        reload: yes
+
+#Download and launch a docker continer
+    - name: download and launch a docker web container
+      docker_container:
+        name: elk
+        image: sebp/elk:761
+        state: started
+        restart_policy: always
+        published_ports:
+          - 5601:5601
+          - 9200:9200
+          - 5044:5044
+
+#Enable docker service
+    - name: Enable docker service
+      systemd:
+        name: docker
+        enabled: yes
+
