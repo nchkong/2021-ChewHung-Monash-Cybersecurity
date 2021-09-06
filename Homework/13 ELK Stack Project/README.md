@@ -62,11 +62,17 @@ A summary of the access policies in place can be found in the table below.
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because it reduces human errors and increases the efficiency due to automation and standarization.
 
 The playbook implements the following tasks:
+
 Step 1: Installation of Docker
+
 Step 2: Download the ELK Image from Github source
+
 Step 3: Apt install ELK Image
+
 Step 4: Enable Instance
+
 Step 5: Setup Instance
+
 Step 6: Start up Instance
 
 
