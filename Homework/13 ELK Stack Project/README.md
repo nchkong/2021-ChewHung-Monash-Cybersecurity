@@ -6,9 +6,11 @@ The files in this repository were used to configure the network depicted below.
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. 
 
-[Ansible filebeat-playbook](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Ansible/filebeat-playbook.yml)
+[Ansible file: Install ELK](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Ansible/install_elk.yml)
 
-[Ansible metribeat-playbook](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Ansible/metricbeat-playbook.yml)
+[Ansible file: Install Filebeat](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Ansible/filebeat-playbook.yml)
+
+[Ansible file: Install metribeat](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Ansible/metricbeat-playbook.yml)
 
 
 This document contains the following details:
@@ -24,18 +26,12 @@ This document contains the following details:
 
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application. 
 
-Load balancing ensures that the application will be highly available, in addition to restricting connections to the network. Load balancer receives traffic comes into the website and distributes it across multiple servers to mitigates Dos attacks and it is much more resilient than if a single server was running the website. In the event, one of the machines is compromised, another machine can still continue to operate. In another aspect, load balancer restricts a direct access to the virtual machines and is built on the zero trust network security model.  In this design, NSGs are used to explicitly permit allowed traffic HTTP and port 80. Without NSG setting on a subnet or NIC of the virtual machine resource, traffic isn't allowed to reach this resource.
+Load balancing ensures that the application will be highly available, in addition to restricting connections to the network. Load balancer receives traffic comes into the website and distributes it across multiple servers to mitigates Dos attacks, therefore it is much more resilient than if a single server was running the website. Load balancer is built on the zero trust network security model.  In this design, NSGs are used to explicitly permit allowed traffic HTTP and port 80. Without NSG setting on a subnet or NIC of the virtual machine resource, traffic isn't allowed to reach this resource.
 
-Another important component is Jump box. It is a special purpose machine typically used to access machines within the internal network or trusted networks. It is exposed to the public internet and sitting in front of other machines within the internal network. Provisioner tool sit in Jumpbox to facilitate the deployment of virtual machines and containers automatically without much human effort. This will drastically reduce the potential for human errors and make the deployment easier especially if dealing with thousands of machines.
+Another important component in this design is Jump box. It is a special purpose machine typically used to access machines within the internal network or trusted networks. Jump box is exposed to the public internet and sitting in front of other machines within the internal network. Provisioner tool sits in Jumpbox to facilitate the deployment of virtual machines and containers automatically without much human effort. This will minimize human errors and make the deployment easier especially if dealing with thousands of machines.
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the data and system logs. In this project, we installed two types of beats. There
-are Filebeat and Metribeat.
-
-Filebeat is a lightweight shipper for forwarding and centralizing log data. it watches for the log files, collects, and forwards them either to Elasticsearch or Logstash for 
-indexing.
-
-Metricbeat is an Elastic Beat. It is a lightweight shipper which can be installed in the servers to periodically collects metrics from the operating system and from services
-running on the server. Metricbeat records the metrics and statistic and ship to a specified output destination such as Elasticsearch or Logstash.
+are Filebeat and Metribeat. Filebeat is a lightweight shipper for forwarding and centralizing log data. it watches for the log files, collects, and forwards them either to Elasticsearch or Logstash for indexing. Metricbeat is an Elastic Beat. It is a lightweight shipper which can be installed in the servers to periodically collects metrics from the operating system and from services running on the server. Metricbeat records the metrics and statistic and ship to a specified output destination such as Elasticsearch or Logstash.
 
 The configuration details of each machine may be found below.
 
@@ -50,27 +46,20 @@ The configuration details of each machine may be found below.
 
 The machines on the internal network are not exposed to the public Internet. 
 
-Only the Jump Box machine can accept connections from the Internet. Access to this machine is only allowed from the IP address: 125.253.30.165. Machines within the network can only be accessed by each other. The Web-1 and Web-2 send data and logs to ELK server.
-
-Which machine did you allow to access your ELK VM?
-Jump Box is allowed to access to ELK VM. 
-
-What was its IP address?
-10.1.0.4
+Only the Jump Box machine can accept connections from the Internet. Access to this machine is only allowed from the IP address: 125.253.30.165 through SSH. Machines within the network can only be accessed by each other. The Web-1 and Web-2 send data and logs to ELK server.
 
 A summary of the access policies in place can be found in the table below.
 
 | Name                     | Publicly Accessible | Allowed IP Addresses          |
 |--------------------------|---------------------|------------------------------ |
-| Jum Jump-Box-Provisioner | Yes                 | 125.253.30.165                |
-| Web-1                    | No                  | 10.1.0.1-254 and 10.2.0.1-254 |        
-| Web-2                    | No                  | 10.1.0.1-254 and 10.2.0.1-254 |
-| ELK                      | No                  | 10.2.0.1-254 and 10.2.0.1-254 |
+| Jump-Box-Provisioner     | Yes                 | 125.253.30.165                |
+| Web-1                    | No                  | 20.37.249.187 (XRedTeam_LB)   |        
+| Web-2                    | No                  | 20.37.249.187 (XRedTeam_LB)   |
+| ELK                      | Yes                 | 125.253.30.165 port:5601      |
 
 ### Elk Configuration
 
-Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because
-it will drastically reduce the potential for human errors and make it easy to configure potentially thousands of identical machines all at once.
+Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because it reduces human errors and increases the efficiency due to automation and standarization.
 
 The playbook implements the following tasks:
 Step 1: Installation of Docker
@@ -83,37 +72,36 @@ Step 6: Start up Instance
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![docker_ps_output.png](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Ansible/docker_ps_output.png)
+![Docker output screen](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Ansible/Docker_ps.png)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor Web-1 and Web-2 servers. Filebeats and Metricbeat have been installed on these machines to collect information from each machine. Filebeat collects log files in the server it installed, E.g system log collects and parses logs created by the system logging service of common Unix/Linux based distributions. On the other hand, Metricbeat periodically collects metrics from the operating system and from services running on the server. E.g Docker Metricbeat collects the information about the docker containers.
 
 
 ###Using the Playbook
-Ansible control node has been installed in the Jump box in this setup.
+Ansible control node has to be installed in the Jump box prior to the filebeat. 
 
 SSH into the control node and follow the steps below:
-- Copy the _____ file to _____.
-- Update the _____ file to include...
-- Run the playbook, and navigate to ____ to check that the installation worked as expected.
 
-Which file is the playbook? Where do you copy it? 
-filebeat-playbook.yml is the playbook. Copy this file from /etc/ansible to /etc/ansible/roles/ 
-filebeat-config.yml also requires to be downloded from gist.githubusercontent.com. copy from /etc/ansible/filebeat-config.yml to /etc/filebeat-config.yml
+Step 1: Copy playbook and update the playbook
+Copy the playbook (.yml) to /etc/ansible  
 
-Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install 
-Filebeat on?
-/etc/ansible/hosts requires an update to include the machine information for ansible to run the playbook. Machines are specified under a group such as [webservers] or [elk].  
+Step 2: Update /etc/ansible/hosts to include machine names. 
+Machines are specified under a group such as [webservers] or [elk]. 
 
-Which URL do you navigate to in order to check that the ELK server is running?
+![Ansible_hosts_file.png](https://github.com/nchkong/2021-ChewHung-Monash-Cybersecurity/blob/Master/Homework/13%20ELK%20Stack%20Project/Ansible/Ansible_hosts_file.png)
+
+Step 3: Update ansible.cfg to include your userid 
+remote_user = "yourid"
+
+Step 4: Play the playbook using ansible-playbook command
+ansible-playbook install_elk.yml
+
+Step 5: Checking on the site to confirm the installation.
 http://20.78.140.1:5601/app/kibana
 
 As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc.
-Download filebeat-config.yml
-curl https://gist.githubusercontent.com/slape/5cc350109583af6cbe577bbcc0710c93/raw/eca603b72586fbe148c11f9c87bf96a63cb25760/Filebeat >> /etc/ansible/filebeat-config.yml
 
-Update /etc/ansible/filebeat-playbook.yml
-vi /etc/ansible/filebeat-playbook.yml
 
 
 
